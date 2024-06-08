@@ -9,16 +9,16 @@ namespace SDSYSTEM.Models
         public int Id { get; set; }
 
         [Required]
-        public string Title { get; set; }
+        public required string Title { get; set; }
 
         [Required]
-        public string Description { get; set; }
+        public required string Description { get; set; }
 
         [Required]
         public int StatusId { get; set; }
 
         [ForeignKey("StatusId")]
-        public TicketStatus Status { get; set; }
+        public TicketStatus? Status { get; set; }
 
         public int? AssignedToId { get; set; }
 
@@ -29,7 +29,7 @@ namespace SDSYSTEM.Models
         public int CreatedById { get; set; }
 
         [ForeignKey("CreatedById")]
-        public User CreatedBy { get; set; }
+        public required User CreatedBy { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; }
@@ -37,9 +37,9 @@ namespace SDSYSTEM.Models
         public DateTime? ResolvedAt { get; set; }
 
         [Required]
-        public string Department { get; set; }
+        public required string Department { get; set; }
 
         [Required]
-        public string FullName { get; set; }
+        public required string FullName { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace SDSYSTEM.Controllers
         // POST: Account/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public IActionResult Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {

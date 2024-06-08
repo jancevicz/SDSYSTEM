@@ -59,9 +59,10 @@ namespace SDSYSTEM.Controllers
         // POST: Tickets/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Tickets/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Department,FullName,StatusId,AssignedToId,CreatedById,CreatedAt,ResolvedAt")] Ticket ticket)
+        public async Task<IActionResult> Create([Bind("Title,Description,Department,FullName,AssignedToId,StatusId,CreatedAt,ResolvedAt")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
@@ -71,11 +72,15 @@ namespace SDSYSTEM.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssignedToId"] = new SelectList(_context.Users, "Id", "Email", ticket.AssignedToId);
-            ViewData["CreatedById"] = new SelectList(_context.Users, "Id", "Email", ticket.CreatedById);
+
+            // Populate ViewData with necessary data for dropdowns
+            ViewData["AssignedToId"] = new SelectList(_context.Users, "Id", "Email");
+            ViewData["CreatedById"] = new SelectList(_context.Users, "Id", "Email");
             ViewData["StatusId"] = new SelectList(_context.TicketStatuses, "Id", "Id", ticket.StatusId);
+
             return View(ticket);
         }
+
 
         // GET: Tickets/Edit/5
         public async Task<IActionResult> Edit(int? id)
