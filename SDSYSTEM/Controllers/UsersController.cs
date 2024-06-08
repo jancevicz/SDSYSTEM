@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SDSYSTEM.Data;
 using SDSYSTEM.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SDSYSTEM.Controllers
 {
@@ -46,12 +45,16 @@ namespace SDSYSTEM.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
+            ViewData["Roles"] = Enum.GetValues(typeof(UserRole)).Cast<UserRole>().Select(r => new SelectListItem
+            {
+                Value = r.ToString(),
+                Text = r.ToString()
+            }).ToList();
+
             return View();
         }
 
         // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Password,Role")] User user)
@@ -62,6 +65,11 @@ namespace SDSYSTEM.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Roles"] = Enum.GetValues(typeof(UserRole)).Cast<UserRole>().Select(r => new SelectListItem
+            {
+                Value = r.ToString(),
+                Text = r.ToString()
+            }).ToList();
             return View(user);
         }
 
@@ -78,12 +86,17 @@ namespace SDSYSTEM.Controllers
             {
                 return NotFound();
             }
+
+            ViewData["Roles"] = Enum.GetValues(typeof(UserRole)).Cast<UserRole>().Select(r => new SelectListItem
+            {
+                Value = r.ToString(),
+                Text = r.ToString()
+            }).ToList();
+
             return View(user);
         }
 
         // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,Email,Password,Role")] User user)
@@ -113,6 +126,11 @@ namespace SDSYSTEM.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Roles"] = Enum.GetValues(typeof(UserRole)).Cast<UserRole>().Select(r => new SelectListItem
+            {
+                Value = r.ToString(),
+                Text = r.ToString()
+            }).ToList();
             return View(user);
         }
 
@@ -140,11 +158,7 @@ namespace SDSYSTEM.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-            }
-
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

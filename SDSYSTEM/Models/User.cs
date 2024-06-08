@@ -2,6 +2,15 @@
 
 namespace SDSYSTEM.Models
 {
+
+    public enum UserRole
+    {
+        Administrator,
+        Coordinator,
+        Support,
+        User
+    }
+
     public class User
     {
         [Key]
@@ -21,11 +30,4 @@ namespace SDSYSTEM.Models
         public UserRole Role { get; set; }
     }
 
-    public enum UserRole
-    {
-        Administrator,
-        Coordinator,
-        Support,
-        User
-    }
 }
