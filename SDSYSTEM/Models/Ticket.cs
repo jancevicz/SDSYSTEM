@@ -20,11 +20,10 @@ namespace SDSYSTEM.Models
         [ForeignKey("StatusId")]
         public TicketStatus Status { get; set; }
 
-        [Required]
-        public int AssignedToId { get; set; }
+        public int? AssignedToId { get; set; }
 
         [ForeignKey("AssignedToId")]
-        public User AssignedTo { get; set; }
+        public User? AssignedTo { get; set; }
 
         [Required]
         public int CreatedById { get; set; }
@@ -36,5 +35,11 @@ namespace SDSYSTEM.Models
         public DateTime CreatedAt { get; set; }
 
         public DateTime? ResolvedAt { get; set; }
+
+        [Required]
+        public string Department { get; set; }
+
+        [Required]
+        public string FullName { get; set; }
     }
 }

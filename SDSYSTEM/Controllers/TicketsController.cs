@@ -61,10 +61,12 @@ namespace SDSYSTEM.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,StatusId,AssignedToId,CreatedById,CreatedAt,ResolvedAt")] Ticket ticket)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Department,FullName,StatusId,AssignedToId,CreatedById,CreatedAt,ResolvedAt")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
+                ticket.CreatedAt = DateTime.Now;
+                ticket.StatusId = 1; // Ustaw status na "Nieprzydzielone"
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -99,7 +101,7 @@ namespace SDSYSTEM.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,StatusId,AssignedToId,CreatedById,CreatedAt,ResolvedAt")] Ticket ticket)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Department,FullName,StatusId,AssignedToId,CreatedById,CreatedAt,ResolvedAt")] Ticket ticket)
         {
             if (id != ticket.Id)
             {
@@ -110,6 +112,16 @@ namespace SDSYSTEM.Controllers
             {
                 try
                 {
+                    if (ticket.AssignedToId.HasValue && ticket.StatusId == 1)
+                    {
+                        ticket.StatusId = 2; // Ustaw status na "Przydzielone"
+                    }
+
+                    if (ticket.ResolvedAt.HasValue)
+                    {
+                        ticket.StatusId = 3; // Ustaw status na "Wykonane"
+                    }
+
                     _context.Update(ticket);
                     await _context.SaveChangesAsync();
                 }
