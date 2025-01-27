@@ -35,6 +35,16 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Date)
+                <a href="@Url.Action("Index", new { sortOrder = ViewData["SortOrder"]?.ToString() == "desc" ? "asc" : "desc" })">
+                    @if (ViewData["SortOrder"]?.ToString() == "desc")
+                    {
+                        <span>↓</span> <!-- Ikona wskazująca na sortowanie malejąco -->
+                    }
+                    else
+                    {
+                        <span>↑</span> <!-- Ikona wskazująca na sortowanie rosnąco -->
+                    }
+                </a>
             </th>
             <th></th>
         </tr>

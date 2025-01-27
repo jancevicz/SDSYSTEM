@@ -21,12 +21,33 @@ namespace SDsystem.Controllers
         }
 
         // GET: Tickets
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
             if (HttpContext.Session.GetString("Role") == "Coordinator")
             {
-                return View(await _context.Tickets.ToListAsync());
+                // Określamy, jak ma wyglądać domyślne sortowanie
+                ViewData["DateSortParam"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+
+                var tickets = from t in _context.Tickets
+                              select t;
+
+                // Sortowanie po dacie
+                switch (sortOrder)
+                {
+                    case "date_desc":
+                        tickets = tickets.OrderByDescending(t => t.Date); // Sortowanie malejąco
+                        break;
+                    case "date_asc":
+                        tickets = tickets.OrderBy(t => t.Date); // Sortowanie rosnąco
+                        break;
+                    default:
+                        tickets = tickets.OrderByDescending(t => t.Date); // Domyślne sortowanie malejąco
+                        break;
+                }
+
+                return View(await tickets.ToListAsync());
             }
+
             return RedirectToAction("Login", "Account");
         }
 
